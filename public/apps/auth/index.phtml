@@ -1,0 +1,24 @@
+<?php
+namespace core;
+
+$login = cfg::auth('login');
+$password = cfg::auth('password');
+
+if(!empty($login) && !empty($password)){
+  if(!isset($_COOKIE['authlogin']) || !isset($_COOKIE['authpassword']) || $_COOKIE['authlogin'] != $login || $_COOKIE['authpassword'] != $password){
+    if(!isset($_SERVER['PHP_AUTH_USER'])){
+      header('WWW-Authenticate: Basic realm="My Realm"');
+      header('HTTP/1.1 401 Unauthorized');
+      exit;
+    } else {
+      if($_SERVER['PHP_AUTH_USER'] == $login && $_SERVER['PHP_AUTH_PW'] == $password) {
+        setcookie('authlogin',$_SERVER['PHP_AUTH_USER'],time()*2,'/');
+        setcookie('authpassword',$_SERVER['PHP_AUTH_PW'],time()*2,'/');
+      } else {
+        die('<html style="background:#BF3030;"><head><title>WRONG</title></head><div style="margin:0px auto;width:300px;text-align:center;color:white;"><h1>WRONG</h1></div></html>');
+      }
+
+    }
+  }
+}
+?>

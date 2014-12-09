@@ -80,7 +80,7 @@ class load {
       ob_end_clean();
       $srcJs = $this->___createSrc('js');
       $srcCss = $this->___createSrc('css');
-      echo preg_replace("/\<\/HEAD\>/i","\t<link charset='UTF-8' media='screen' rel='stylesheet' type='text/css' href='/index.css{$srcCss}' />\n\t<script src='/index.js{$srcJs}'></script>\n</head>",$contents);
+      echo preg_replace("/\<\/HEAD\>/i","\n\t<link charset='UTF-8' media='screen' rel='stylesheet' type='text/css' href='/index.css{$srcCss}' />\n\t<script src='/index.js{$srcJs}'></script>\n</head>",$contents);
     }
   }
 
