@@ -91,6 +91,10 @@ $input = json_decode($input,1);
 switch($_SERVER['HTTP_ACCEPT']){
   case "application/apps":
     header('Content-type: application/json');
+    foreach($input as $appsName=>$appsValue){
+      $echo[$appsName] = $load->{$appsName}($appsValue);
+    }
+    die(json_encode($echo));
   break;
   case "application/view":
     header('Content-type: application/json');
@@ -108,7 +112,7 @@ switch($_SERVER['HTTP_ACCEPT']){
     }
     $src['js'] = $load->___createSrc('js',1);
     $src['css'] = $load->___createSrc('css',1);
-    if(isset($return)) echo json_encode(['view'=>$return,'js'=>$js,'css'=>$css,'src'=>$src]);
+    if(isset($return)) die(json_encode(['view'=>$return,'js'=>$js,'css'=>$css,'src'=>$src]));
   break;
   default:
     header('Content-type: text/html');

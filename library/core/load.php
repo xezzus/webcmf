@@ -21,19 +21,34 @@ class load {
     if(is_file($appsFile)){
       $appsName = "apps\\".$name;
       $apps = new $appsName;
-      if(is_callable($apps)) { $value = call_user_func_array($apps,$value); }
-      if(is_array($value)) $value = new value($value);
-      else return $value;
+      if(is_callable($apps)) { 
+        if(is_array($value)){
+          $value = call_user_func_array($apps,$value);
+        } else {
+          $value = call_user_func($apps,$value);
+        }
+      }
     }
 
     # include
     $file = __DIR__."/../../public/apps/$name/index.phtml";
-    if(is_file($file)) require($file);
+    if(is_file($file)) {
+      if(is_array($value)) $value = new value($value);
+      ob_start();
+      require($file);
+      $require = ob_get_contents();
+      ob_end_flush();
+      return $require;
+    } else {
+      return $value;
+    }
   }
 
   public function ___filter($value){
     if(is_array($value)){
-      $filter = require(__DIR__."/../../config/filter.php");
+      $filter = __DIR__."/../../config/filter.php";
+      if(!is_file($filter)) die('{"err":"cannot find filter file"}');
+      $filter = require($filter);
       foreach($value as $param=>$v){
        $continue = false;
        if(isset($filter[$param])) {
