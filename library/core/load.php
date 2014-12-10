@@ -58,7 +58,7 @@ class load {
          $value[$param] = $v;
          continue;
        }
-       die('{"err":"cannot validate: view-'.$name.', param-'.$param.'"}');
+       die('{"err":"cannot validate filter: '.$param.'"}');
       }
     }
     return $value;
