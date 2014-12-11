@@ -51,6 +51,10 @@ class pg {
     return self::$fetchAll[$uniq];
   }
 
+  public static function exec($sql){
+    return self::exec($sql);
+  }
+
   private function __clone(){}
   private function __wakeup(){}
 }
