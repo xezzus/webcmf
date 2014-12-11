@@ -51,7 +51,7 @@ class pg {
     return self::$fetchAll[$uniq];
   }
 
-  public static function exec($sql){
+  public function execute($sql){
     return self::exec($sql);
   }
 
