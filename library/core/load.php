@@ -37,7 +37,7 @@ class load {
       ob_start();
       require($file);
       $require = ob_get_contents();
-      ob_end_flush();
+      ob_end_clean();
       return $require;
     } else {
       return $value;
