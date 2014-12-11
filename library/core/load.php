@@ -34,11 +34,7 @@ class load {
     $file = __DIR__."/../../public/apps/$name/index.phtml";
     if(is_file($file)) {
       if(is_array($value)) $value = new value($value);
-      ob_start();
       require($file);
-      $require = ob_get_contents();
-      ob_end_clean();
-      return $require;
     } else {
       return $value;
     }
