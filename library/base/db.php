@@ -52,6 +52,10 @@ class db {
     return self::$fetchAll[$uniq];
   }
 
+  public function execute($sql){
+    return self::exec($sql);
+  }
+
   private function __clone(){}
   private function __wakeup(){}
 }
