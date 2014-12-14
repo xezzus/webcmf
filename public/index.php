@@ -9,9 +9,7 @@ header('Pragma: no-cache');
 require_once(__DIR__.'/../load.php');
 
 # pathname
-if(isset($_SERVER['HTTP_REFERER'])) $pathname = parse_url($_SERVER['HTTP_REFERER'])['path'];
-else $pathname = $_SERVER['REQUEST_URI'];
-$pathname = explode('/',$pathname);
+$pathname = explode('/',$_SERVER['REQUEST_URI']);
 $pathname = array_filter($pathname,function($val){ if(!empty(trim($val))) return $val; });
 $pathname = implode('/',$pathname);
 $pathname = parse_url($pathname);
@@ -30,6 +28,9 @@ if(isset($pathname['path'])){
 define('pathname',$pathname);
 unset($pathname,$k,$v,$val);
 
+# pathname to referer
+if(isset($_SERVER['HTTP_REFERER'])) $pathname = parse_url($_SERVER['HTTP_REFERER'])['path'];
+else $pathname = '';
 
 # JavaScript
 if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
