@@ -74,7 +74,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
     }
     # include page js
     $file = core\load::___findView(null,'css',$path);
-    if(is_file($file)) $contents .= file_get_contents($file).';';
+    if(is_file($file)) $contents .= file_get_contents($file);
   }
   # include apps css
   if(isset($_GET['apps'])){
