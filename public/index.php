@@ -36,16 +36,22 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
 
   $contents = '';
   if(!isset($_GET['local'])){
+    # include global js
     foreach(glob(__DIR__.'/js/*.js') as $file){
       $contents .= file_get_contents($file).';';
     }
+    # include page js
+    $file = core\load::___findView(null,'js',$path);
+    if(is_file($file)) $contents .= file_get_contents($file).';';
   }
+  # include apps js
   if(isset($_GET['apps'])){
     foreach(explode(',',$_GET['apps']) as $apps){
       $file = core\load::___findApps($apps,'js');
       if(is_file($file)) $contents .= file_get_contents($file).';';
     }
   }
+  # include view js
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
       $file = core\load::___findView($view,'js',$path);
@@ -62,16 +68,22 @@ exit;
 if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
   $contents = '';
   if(!isset($_GET['local'])){
+    # include global css
     foreach(glob(__DIR__.'/css/*.css') as $file){
       $contents .= file_get_contents($file);
     }
+    # include page js
+    $file = core\load::___findView(null,'js',$path);
+    if(is_file($file)) $contents .= file_get_contents($file).';';
   }
+  # include apps css
   if(isset($_GET['apps'])){
     foreach(explode(',',$_GET['apps']) as $apps){
       $file = core\load::___findApps($apps,'css');
       if(is_file($file)) $contents .= file_get_contents($file);
     }
   }
+  # include view css
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
       $file = core\load::___findView($view,'css',$path);
