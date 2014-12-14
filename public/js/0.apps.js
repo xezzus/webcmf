@@ -6,7 +6,7 @@ function apps(cmd,callback){
   // xhr
   var xhr = new XMLHttpRequest;
   var accept = 'application/apps';
-  xhr.open("POST", '/', true);
+  xhr.open("POST", window.location.pathname, true);
   xhr.setRequestHeader('Accept',accept); // view/json, view/html
   xhr.send(JSON.stringify(act));
   xhr.onreadystatechange = function(){
