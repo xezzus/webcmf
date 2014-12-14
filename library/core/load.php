@@ -102,7 +102,7 @@ class load {
 
   public function ___findView($name=null,$type='phtml',$path=null){
     $dir = __DIR__.'/../../public/'.((is_null($name)) ? 'page' : "view/$name")."/";
-    if(is_null($path)) $path = URLPATH;
+    if(is_null($path)) $path = pathname;
     $route = __DIR__.'/../../config/route.php';
     if(is_file($route)) $route = require($route);
     else $route = [];

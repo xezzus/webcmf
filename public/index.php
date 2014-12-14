@@ -8,28 +8,28 @@ header('Pragma: no-cache');
 # load
 require_once(__DIR__.'/../load.php');
 
-# URLPATH
-$path = explode('/',$_SERVER['REQUEST_URI']);
-$path = array_filter($path,function($val){ if(!empty(trim($val))) return $val; });
-$path = implode('/',$path);
-$path = parse_url($path);
-if(isset($path['path'])){
-  $path = $path['path'];
-  $path = explode('.',$path)[0];
-  $path = explode('/',$path);
-  foreach($path as $k=>$v){
+# pathname
+if(isset($_SERVER['HTTP_REFERER'])) $pathname = parse_url($_SERVER['HTTP_REFERER'])['path'];
+else $pathname = $_SERVER['REQUEST_URI'];
+$pathname = explode('/',$pathname);
+$pathname = array_filter($pathname,function($val){ if(!empty(trim($val))) return $val; });
+$pathname = implode('/',$pathname);
+$pathname = parse_url($pathname);
+if(isset($pathname['path'])){
+  $pathname = $pathname['path'];
+  $pathname = explode('.',$pathname)[0];
+  $pathname = explode('/',$pathname);
+  foreach($pathname as $k=>$v){
     $v = trim($v);
-    if(empty($v)) unset($path[$k]);
+    if(empty($v)) unset($pathname[$k]);
   }
-  $path = implode('/',$path);
+  $pathname = implode('/',$pathname);
 } else {
-  $path = '';
+  $pathname = '';
 }
-define('URLPATH',$path);
-unset($path,$k,$v,$val);
+define('pathname',$pathname);
+unset($pathname,$k,$v,$val);
 
-if(isset($_SERVER['HTTP_REFERER'])) $path = parse_url($_SERVER['HTTP_REFERER'])['path'];
-else $path = '';
 
 # JavaScript
 if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
@@ -41,7 +41,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
       $contents .= file_get_contents($file).';';
     }
     # include page js
-    $file = core\load::___findView(null,'js',$path);
+    $file = core\load::___findView(null,'js',pathname);
     if(is_file($file)) $contents .= file_get_contents($file).';';
   }
   # include apps js
@@ -54,7 +54,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
   # include view js
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
-      $file = core\load::___findView($view,'js',$path);
+      $file = core\load::___findView($view,'js',pathname);
       if(is_file($file)) $contents .= file_get_contents($file).';';
     }
   }
@@ -73,7 +73,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
       $contents .= file_get_contents($file);
     }
     # include page js
-    $file = core\load::___findView(null,'css',$path);
+    $file = core\load::___findView(null,'css',pathname);
     if(is_file($file)) $contents .= file_get_contents($file);
   }
   # include apps css
@@ -86,7 +86,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
   # include view css
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
-      $file = core\load::___findView($view,'css',$path);
+      $file = core\load::___findView($view,'css',pathname);
       if(is_file($file)) $contents .= file_get_contents($file);
     }
   }
