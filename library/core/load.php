@@ -21,13 +21,7 @@ class load {
     if(is_file($appsFile)){
       $appsName = "apps\\".$name;
       $apps = new $appsName;
-      if(is_callable($apps)) { 
-        if(is_array($value)){
-          $value = call_user_func_array($apps,$value);
-        } else {
-          $value = call_user_func($apps,$value);
-        }
-      }
+      if(is_callable($apps)) { $value = call_user_func($apps,$value); }
     }
 
     # include
