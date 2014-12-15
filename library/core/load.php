@@ -60,20 +60,24 @@ class load {
     return $value;
   }
 
-  public function ___createSrc($type,$local=null){
+  public function ___createSrc($type,$arr=false){
+    $js['view'] = [];
     foreach($this->___view as $view){
       $file = $this->___findView($view,$type);
       if(!is_file($file)) continue;
       $js['view'][$view] = $view;
     }
+    $js['apps'] = [];
     foreach($this->___apps as $apps){
       $file = $this->___findApps($apps,$type);
       if(!is_file($file)) continue;
       $js['apps'][$apps] = $apps;
     }
+    if($arr == true) {
+      return ['apps'=>array_values($js['apps']),'view'=>array_values($js['view'])];
+    }
     if(isset($js['view'])) $src[] = 'view='.implode(',',$js['view']);
     if(isset($js['apps'])) $src[] = 'apps='.implode(',',$js['apps']);
-    if(!empty($src) && !empty($src) && !empty($local)) $src[] = 'local';
     if(isset($src)){
       $src = '?'.implode('&',$src);
     } else {

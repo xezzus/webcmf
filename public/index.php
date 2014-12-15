@@ -42,7 +42,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
       $contents .= file_get_contents($file).';';
     }
     # include page js
-    $file = core\load::___findView(null,'js',pathname);
+    $file = core\load::___findView(null,'js',$pathname);
     if(is_file($file)) $contents .= file_get_contents($file).';';
   }
   # include apps js
@@ -55,7 +55,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.js'){
   # include view js
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
-      $file = core\load::___findView($view,'js',pathname);
+      $file = core\load::___findView($view,'js',$pathname);
       if(is_file($file)) $contents .= file_get_contents($file).';';
     }
   }
@@ -74,7 +74,7 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
       $contents .= file_get_contents($file);
     }
     # include page js
-    $file = core\load::___findView(null,'css',pathname);
+    $file = core\load::___findView(null,'css',$pathname);
     if(is_file($file)) $contents .= file_get_contents($file);
   }
   # include apps css
@@ -87,8 +87,9 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
   # include view css
   if(isset($_GET['view'])){
     foreach(explode(',',$_GET['view']) as $view){
-      $file = core\load::___findView($view,'css',pathname);
+      $file = core\load::___findView($view,'css',$pathname);
       if(is_file($file)) $contents .= file_get_contents($file);
+      file_put_contents(__DIR__.'/test.'.$view.'.css',$pathname);
     }
   }
   header('Content-type: text/css');
@@ -105,27 +106,25 @@ switch($_SERVER['HTTP_ACCEPT']){
   case "application/apps":
     header('Content-type: application/json');
     foreach($input as $appsName=>$appsValue){
+      ob_start();
       $echo[$appsName] = $load->{$appsName}($appsValue);
+      $require = ob_get_contents();
+      ob_end_clean();
+      if(!empty($require)) $echo[$appsName] = $require;
     }
     die(json_encode($echo));
   break;
   case "application/view":
     header('Content-type: application/json');
-    $js = [];
-    $css = [];
     foreach($input as $view=>$value){
       ob_start();
       $load->___view($view);
       $return[$view] = ob_get_contents();
       ob_end_clean();
-      $file = $load->___findView($view,'js');
-      if(is_file($file)) $js[$view] = explode('/public',$file)[1];
-      $file = $load->___findView($view,'css');
-      if(is_file($file)) $css[$view] = explode('/public',$file)[1];
     }
-    $src['js'] = $load->___createSrc('js',1);
-    $src['css'] = $load->___createSrc('css',1);
-    if(isset($return)) die(json_encode(['view'=>$return,'js'=>$js,'css'=>$css,'src'=>$src]));
+    $js = $load->___createSrc('js',true);
+    $css = $load->___createSrc('css',true);
+    if(isset($return)) die(json_encode(['view'=>$return,'js'=>$js,'css'=>$css]));
   break;
   default:
     header('Content-type: text/html');

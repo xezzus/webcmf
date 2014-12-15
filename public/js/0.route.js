@@ -40,42 +40,32 @@ function route(callback){
         for(i in response.view){ 
           if(target.dataset.viewLock != i) {
             view[i].innerHTML = response.view[i];
-            var anticache = new Date().getTime();
-            if(response.js[i] != undefined){
-              var head = document.getElementsByTagName('html')[0];
-              var elm = document.createElement('script');
-              elm.src = response.js[i]+'?'+anticache;
-              elm.type = 'text/javascript';
-              head.appendChild(elm);
-              elm.parentNode.removeChild(elm);
-            }
-            if(response.css[i] != undefined){
-              var head = document.getElementsByTagName('head')[0];
-              var elm = document.createElement('link');
-              elm.href = response.css[i]+'?'+anticache;
-              elm.type = 'text/css';
-              elm.rel = 'stylesheet';
-              elm.media = 'all';
-              head.appendChild(elm);
-              //elm.parentNode.removeChild(elm);
-            }
+            response.css.view.push(i);
+            response.js.view.push(i);
           }
         }
-        // global
-        if(response.src.css != ''){
+        // anticache
+        var anticache = new Date().getTime();
+        // include css
+        if(response.css != ''){
           var head = document.getElementsByTagName('head')[0];
           var elm = document.createElement('link');
-          elm.href = '/index.css'+response.src.css+'&'+anticache;
+          var cssapps = response.css.apps.join(',');
+          var cssview = response.css.view.join(',');
+          elm.href = '/index.css?apps='+cssapps+'&view='+cssview+'&local&'+anticache;
           elm.type = 'text/css';
           elm.rel = 'stylesheet';
           elm.media = 'all';
           head.appendChild(elm);
           //elm.parentNode.removeChild(elm);
         }
-        if(response.src.js != ''){
+        // include js
+        if(response.js != ''){
           var head = document.getElementsByTagName('html')[0];
           var elm = document.createElement('script');
-          elm.src = '/index.js'+response.src.js+'&'+anticache;
+          var jsapps = response.js.apps.join(',');
+          var jsview = response.js.view.join(',');
+          elm.src = '/index.js?apps='+jsapps+'&view='+jsview+'&local&'+anticache;
           elm.type = 'text/javascript';
           head.appendChild(elm);
           //elm.parentNode.removeChild(elm);
