@@ -8,7 +8,7 @@ class value {
   }
 
   public function __get($name){
-    return '::EMPETY::';
+    return "::$name::";
   }
 
 }
