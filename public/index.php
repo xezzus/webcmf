@@ -89,7 +89,6 @@ if(parse_url($_SERVER['REQUEST_URI'])['path'] == '/index.css'){
     foreach(explode(',',$_GET['view']) as $view){
       $file = core\load::___findView($view,'css',$pathname);
       if(is_file($file)) $contents .= file_get_contents($file);
-      file_put_contents(__DIR__.'/test.'.$view.'.css',$pathname);
     }
   }
   header('Content-type: text/css');
