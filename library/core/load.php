@@ -71,7 +71,7 @@ class load {
       return ['apps'=>array_values($js['apps']),'view'=>array_values($js['view'])];
     }
     if(isset($js['view']) && !empty($js['view'])) $src[] = 'view='.implode(',',$js['view']);
-    if(isset($js['apps']) && !empty($js['view'])) $src[] = 'apps='.implode(',',$js['apps']);
+    if(isset($js['apps']) && !empty($js['apps'])) $src[] = 'apps='.implode(',',$js['apps']);
     if(isset($src)){
       $src = '?'.implode('&',$src);
     } else {
