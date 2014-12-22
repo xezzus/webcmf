@@ -15,7 +15,7 @@ class load {
     $this->___apps[$name] = $name;
     if(empty($value)) $value[0] = [];
     # filter
-    $value = $this->___filter($value[0]);
+    $this->___filter($value[0]); $value = $value[0];
     # call
     $appsFile = __DIR__."/../apps/$name.php";
     if(is_file($appsFile)){
@@ -35,23 +35,31 @@ class load {
   }
 
   public function ___filter($value){
-    if(is_array($value)){
+    if(!empty($value) && is_array($value)){
       $filter = __DIR__."/../../config/filter.php";
       if(!is_file($filter)) die('{"err":"cannot find filter file"}');
       $filter = require($filter);
-      foreach($value as $param=>$v){
-       $continue = false;
-       if(isset($filter[$param])) {
-         if(preg_match("/{$filter[$param]}/",$v)) $continue = true;
-       }
-       if($continue === true) {
-         $value[$param] = $v;
-         continue;
-       }
-       die('{"err":"cannot validate filter: '.$param.'"}');
-      }
+      $func = function($filter,$value,$func=null){
+        foreach($value as $param=>$val){
+          if(is_array($val)){
+            $func($filter,$val,$func);
+            continue;
+          }
+          $continue = false;
+          if(isset($filter[$param])) {
+           if(preg_match("/{$filter[$param]}/",$val)) $continue = true;
+          }
+          if($continue === true) {
+           $value[$param] = $val;
+           continue;
+          }
+          die('{"err":"cannot validate filter: '.$param.'"}');
+          }
+      };
+      var_dump($value);
+      $func($filter,$value,$func);
     }
-    return $value;
+    return true;
   }
 
   public function ___createSrc($type,$arr=false){
