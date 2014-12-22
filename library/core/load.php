@@ -56,7 +56,6 @@ class load {
           die('{"err":"cannot validate filter: '.$param.'"}');
           }
       };
-      var_dump($value);
       $func($filter,$value,$func);
     }
     return true;
