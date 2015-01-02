@@ -19,9 +19,9 @@ class webStomp {
     $this->disconnect();
   }
 
-  public function send($text){
+  public function send($destination,$text){
     $len = strlen($text);
-    $send = "\x0ASEND\x0Acontent-type:text/plain\x0Adestination:/topic/test\x0Acontent-length:".($len+2)."\x0A\x0A{$text}\x0A\x0A\x00\x0A";
+    $send = "\x0ASEND\x0Acontent-type:text/plain\x0Adestination:$destination\x0Acontent-length:".($len+2)."\x0A\x0A{$text}\x0A\x0A\x00\x0A";
     $this->write($send);
   }
 
