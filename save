@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+git add -A
+git commit -m "save"
+git pull webcmf master
+git pull origin master
+git push origin master
