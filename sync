@@ -3,5 +3,5 @@
 for i in $(seq 60)
 do
 	git pull origin master
-	sleep 1
+	sleep 5
 done
